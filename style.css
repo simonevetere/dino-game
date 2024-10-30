@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #87CEEB;
+}
+
+canvas {
+    border: 2px solid black;
+    background-color: #87CEEB;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.controls button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    margin: 5px;
+    font-size: 1.2em;
+    border-radius: 10px;
+    cursor: pointer;
+    outline: none;
+}
+
+.controls button:hover {
+    background-color: #0056b3;
+}
+
+@media only screen and (max-width: 600px) {
+    canvas {
+        width: 100%;
+    }
+    .controls button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
