@@ -1,3 +1,7 @@
+document.body.onselectstart = function() {
+    return false;
+}
+
 const canvas = document.getElementById('gameCanvas');
 var lives = 3;
 
