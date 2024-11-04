@@ -43,7 +43,7 @@ const player = {
     dx: 0,
     dy: 0,
     gravity: 0.1,
-    jumpPower: -10,
+    jumpPower: -7,
     canJump: true
 };
 
@@ -171,9 +171,16 @@ function checkCollision() {
                 if(lives == 0){
                     window.location.reload();
                 }
+
+                livesstring = "";
                 lives -= 1;
                 hit = true; // Imposta 'hit' a true
-                livesElement.textContent = "lives : " + lives;
+
+                for(let y = 0; y <= lives; y++){
+                    livesstring = livesstring + "❤️";
+                }
+                
+                livesElement.textContent = livesstring;
                 setTimeout(() => resetHit(), 500);
                 break;
             }
