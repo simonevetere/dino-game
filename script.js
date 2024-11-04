@@ -41,7 +41,7 @@ const player = {
     speed: 2,
     dx: 0,
     dy: 0,
-    gravity: 0.5,
+    gravity: 0.1,
     jumpPower: -15,
     canJump: true
 };
@@ -280,7 +280,7 @@ function drawAnimatedImage(arr,x,y,angle,factor,changespeed) {
         try {
             ctx.drawImage(arr[Math.round(Date.now()/changespeed) % arr.length], x, y, 64, 64);
         } catch {
-            ctx.drawImage(arr[1], x, y, 64, 64);
+            ctx.drawImage(arr[arr.length], x, y, 64, 64);
         }
     }
     ctx.restore();
