@@ -42,7 +42,7 @@ const player = {
     dx: 0,
     dy: 0,
     gravity: 0.1,
-    jumpPower: -15,
+    jumpPower: -10,
     canJump: true
 };
 
