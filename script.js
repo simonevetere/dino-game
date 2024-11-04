@@ -27,6 +27,12 @@ for (var i = 1; i < 22; i++) {
   playerImage[i].src = "img/dino/"+i+".png";
 }
 
+var playerRed = [];
+for (var i = 1; i < 22; i++) {
+  playerRed[i] = new Image();
+  playerRed[i].src = "img/dino-red/"+i+".png";
+}
+
 var obstacleImage = [];
 for (var i = 1; i < 28; i++) {
   obstacleImage[i] = new Image();
@@ -36,6 +42,7 @@ for (var i = 1; i < 28; i++) {
 const meteorImage = new Image();
 meteorImage.src = 'img/meteor.png';
 let meteorAngle = 0;
+let intervalRed = false;
 
 
 const player = {
@@ -62,7 +69,11 @@ const obstacles = [];
 const meteore = [];
 
 function drawPlayer() {
-    drawAnimatedImage(playerImage, player.x, player.y, 0, 0, player.width, player.height);
+    drawAnimatedImage(playerImage, player.x, player.y, 0, 0, 64, 64);
+}
+
+function drawPlayerRed() {
+    drawAnimatedImage(playerRed, player.x, player.y, 0, 0, 64, 64);
 }
 
 function drawGround() {
@@ -71,7 +82,7 @@ function drawGround() {
 }
 
 function drawObstacle(obstacle) {
-    drawAnimatedImage(obstacleImage, obstacle.x-20, obstacle.y-20, 0, 0, obstacle.width, obstacle.height);
+    drawAnimatedImage(obstacleImage, obstacle.x-20, obstacle.y-20, 0, 0, 1, obstacle.height, obstacle.width);
 }
 
 function drawMeteor(meteor) {
@@ -104,12 +115,15 @@ function updateObstacles() {
 }
 
 function createObstacle() {
-    const height = Math.random() * (player.height + 20) + 10;
+    const height = Math.floor(Math.random() * canvas.height);
+
+    randomFactor = Math.floor(Math.random() * 141) + 50;
+
     obstacles.push({
         x: canvas.width,
         y: ground.y - height,
-        width: 20,
-        height: 20,
+        height : randomFactor,
+        width : randomFactor,
         speed: 1
     });
 }
@@ -160,7 +174,11 @@ function checkCollision() {
                 }
                 
                 livesElement.textContent = livesstring;
-                setTimeout(() => resetHit(), 500);
+
+                intervalRed = true;
+
+                setTimeout(() => resetHit(), 1000);
+
                 break;
             }
         }
@@ -185,7 +203,11 @@ function checkCollision() {
                 }
                 
                 livesElement.textContent = livesstring;
-                setTimeout(() => resetHit(), 500);
+                
+                intervalRed = true;
+
+                setTimeout(() => resetHit(), 1000);
+                
                 break;
             }
         }
@@ -196,13 +218,18 @@ function checkCollision() {
 // Usa questa funzione per resettare 'hit' quando necessario
 function resetHit() {
     hit = false;
+    intervalRed = false;
 }
 
 
 function update() {
     clear();
-    drawPlayer();
     drawGround();
+    if(intervalRed){
+        drawPlayerRed();
+    } else {
+        drawPlayer();
+    }
     newPos();
     updateObstacles();
     updateMeteors();
@@ -289,20 +316,39 @@ setInterval(createMeteor, 1500);
 
 update();
 
-function drawAnimatedImage(arr,x,y,angle,factor,changespeed) {
+function drawAnimatedImage(arr,x,y,angle,factor,changespeed,w = "",h = "") {
+    let width = 64;
+    let height = 64;
+
+    if(w != ""){
+        width = w;
+    }
+
+    if(h != ""){
+        height = h;
+    }
+
     if (!factor) {
         factor = 1;
     }
     if (!changespeed) {
-        changespeed = 1;
+        changespeed = 0.001;
     }
     ctx.save();
+
     if (!!arr[Math.round(Date.now()/changespeed) % arr.length] ) {
         try {
-            ctx.drawImage(arr[Math.round(Date.now()/changespeed) % arr.length], x, y, 64, 64);
+            ctx.drawImage(arr[Math.round(Date.now()/changespeed) % arr.length], x, y, width, height);
         } catch {
-            ctx.drawImage(arr[arr.length], x, y, 64, 64);
+            ctx.drawImage(arr[arr.length], x, y, width, height);
         }
+    } else {
+        try {
+            ctx.drawImage(arr[1], x, y, width, height);
+        } catch {
+            console.log("aiutami non capisco perchè va in errore");
+        }
+        
     }
     ctx.restore();
 }
