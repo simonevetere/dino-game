@@ -20,6 +20,7 @@ canvas.width = window.innerWidth;
 
 
 const ctx = canvas.getContext('2d');
+let speedHard = 1;
 
 var playerImage = [];
 for (var i = 1; i < 22; i++) {
@@ -124,11 +125,12 @@ function createObstacle() {
         y: ground.y - height,
         height : randomFactor,
         width : randomFactor,
-        speed: 1
+        speed: speedHard
     });
 }
 
 function updateMeteors() {
+
     for (let i = meteore.length - 1; i >= 0; i--) {
         meteore[i].y += meteore[i].speed;
         if (meteore[i].y - meteore[i].radius > canvas.height) {
@@ -145,12 +147,14 @@ function createMeteor() {
         x: Math.random() * canvas.width,
         y: -radius,
         radius: radius,
-        speed: 1
+        speed: speedHard
     });
 }
 
 var hit = false;
 let livesElement = document.getElementById('lives');
+
+setInterval(() => resetHit(), 1000);
 
 function checkCollision() {
     if (!hit) { // Controlla se 'hit' è ancora falso
@@ -161,6 +165,8 @@ function checkCollision() {
                 player.y < obstacles[i].y + obstacles[i].height &&
                 player.y + player.height > obstacles[i].y
             ) { 
+                obstacles.splice(i, 1);
+
                 if(lives == 0){
                     window.location.reload();
                 }
@@ -176,8 +182,6 @@ function checkCollision() {
                 livesElement.textContent = livesstring;
 
                 intervalRed = true;
-
-                setTimeout(() => resetHit(), 1000);
 
                 break;
             }
@@ -190,6 +194,8 @@ function checkCollision() {
                 player.y < meteore[i].y + meteore[i].radius &&
                 player.y + player.height > meteore[i].y - meteore[i].radius
             ) { 
+                meteore.splice(i, 1);
+
                 if(lives == 0){
                     window.location.reload();
                 }
@@ -205,8 +211,6 @@ function checkCollision() {
                 livesElement.textContent = livesstring;
                 
                 intervalRed = true;
-
-                setTimeout(() => resetHit(), 1000);
                 
                 break;
             }
@@ -340,7 +344,7 @@ function drawAnimatedImage(arr,x,y,angle,factor,changespeed,w = "",h = "") {
         try {
             ctx.drawImage(arr[Math.round(Date.now()/changespeed) % arr.length], x, y, width, height);
         } catch {
-            ctx.drawImage(arr[arr.length], x, y, width, height);
+            console.log("aiutami non capisco perchè va in errore");
         }
     } else {
         try {
@@ -385,12 +389,7 @@ function updateTimer() {
     // Check if a minute has passed since the last update (or since startTime if no previous update)
     if (elapsedTime - lastUpdateTime >= 13) {
         lastUpdateTime = elapsedTime; // Update lastUpdateTime for future checks
-
-        // Create new obstacles at regular intervals
-        setInterval(createObstacle, 1500);
-
-        // Create new meteors at regular intervals
-        setInterval(createMeteor, 1000);
+        speedHard++;
     }
 }
 
