@@ -31,6 +31,7 @@ for (var i = 1; i < 28; i++) {
 
 const meteorImage = new Image();
 meteorImage.src = 'img/meteor.png';
+let meteorAngle = 0;
 
 
 const player = {
@@ -70,7 +71,7 @@ function drawObstacle(obstacle) {
 }
 
 function drawMeteor(meteor) {
-    ctx.drawImage(meteorImage, meteor.x - meteor.radius, meteor.y - meteor.radius, meteor.radius * 2, meteor.radius * 2);
+    drawMeteor(meteorImage, meteor.x - meteor.radius, meteor.y - meteor.radius, meteor.radius * 2, meteor.radius * 2);
 }
 
 function clear() {
@@ -116,6 +117,8 @@ function updateMeteors() {
             meteore.splice(i, 1);
         }
     }
+
+    meteorAngle += 0.01;
 }
 
 function createMeteor() {
@@ -143,9 +146,16 @@ function checkCollision() {
                 if(lives == 0){
                     window.location.reload();
                 }
+
+                livesstring = "";
                 lives -= 1;
                 hit = true; // Imposta 'hit' a true
-                livesElement.textContent = "lives : " + lives;
+
+                for(let y = 0; y <= lives; y++){
+                    livesstring = livesstring + "❤️";
+                }
+                
+                livesElement.textContent = livesstring;
                 setTimeout(() => resetHit(), 500);
                 break;
             }
@@ -284,6 +294,27 @@ function drawAnimatedImage(arr,x,y,angle,factor,changespeed) {
         }
     }
     ctx.restore();
+}
+
+function drawStaticImage(image, x, y, width, height, angle) {
+    ctx.save(); // Salva lo stato del contesto
+
+    // Trasla il contesto al centro dell'immagine
+    ctx.translate(x + width / 2, y + height / 2);
+
+    // Ruota il contesto
+    ctx.rotate(angle);
+
+    // Disegna l'immagine
+    ctx.drawImage(image, -width / 2, -height / 2, width, height);
+
+    ctx.restore(); // Ripristina lo stato del contesto
+}
+
+// Usalo nella funzione drawMeteor
+function drawMeteor(meteor) {
+    var angle = meteorAngle; // Genera un angolo casuale per la rotazione
+    drawStaticImage(meteorImage, meteor.x - meteor.radius, meteor.y - meteor.radius, meteor.radius * 2, meteor.radius * 2, angle);
 }
 
 let timerElement = document.getElementById('timer');
