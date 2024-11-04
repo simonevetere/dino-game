@@ -1,17 +1,8 @@
 const canvas = document.getElementById('gameCanvas');
 var lives = 3;
 
-function isMobileDevice() {
-    return navigator.userAgent.indexOf("Android") > 0 || navigator.userAgent.indexOf("iPhone") > 0;
-}
-
-if (isMobileDevice()) {
-    canvas.height = 800;
-    canvas.width = 400;
-} else {
-    canvas.height = 1000;
-    canvas.width = 2000;
-}
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
 
 
 const ctx = canvas.getContext('2d');
