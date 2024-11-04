@@ -6,6 +6,7 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #87CEEB;
+    overflow: hidden;
 }
 
 canvas {
@@ -32,6 +33,10 @@ canvas {
 
 .controls button:hover {
     background-color: #0056b3;
+}
+
+body.no-scroll { 
+    overflow: hidden; /* Disabilita lo scroll */ 
 }
 
 @media only screen and (max-width: 600px) {

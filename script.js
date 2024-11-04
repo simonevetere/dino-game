@@ -1,6 +1,16 @@
 const canvas = document.getElementById('gameCanvas');
 var lives = 3;
 
+window.scrollTo(0, document.body.scrollHeight); 
+
+window.addEventListener('scroll', 
+    function() {
+        if (window.innerHeight + window.scrollY >= document.body.scrollHeight) { 
+            document.body.classList.add('no-scroll'); 
+        } 
+    }
+);
+
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
