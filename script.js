@@ -37,7 +37,7 @@ const player = {
     y: 300,
     width: 50,
     height: 50,
-    speed: 5,
+    speed: 2,
     dx: 0,
     dy: 0,
     gravity: 0.5,
@@ -104,7 +104,7 @@ function createObstacle() {
         y: ground.y - height,
         width: 20,
         height: 20,
-        speed: 3
+        speed: 1
     });
 }
 
@@ -123,7 +123,7 @@ function createMeteor() {
         x: Math.random() * canvas.width,
         y: -radius,
         radius: radius,
-        speed: 3
+        speed: 1
     });
 }
 
