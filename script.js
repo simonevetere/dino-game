@@ -21,6 +21,7 @@ canvas.width = window.innerWidth;
 
 const ctx = canvas.getContext('2d');
 let speedHard = 1;
+let points = 0;
 
 var playerImage = [];
 for (var i = 1; i < 22; i++) {
@@ -35,7 +36,7 @@ for (var i = 1; i < 22; i++) {
 }
 
 var obstacleImage = [];
-for (var i = 1; i < 28; i++) {
+for (var i = 1; i < 64; i++) {
   obstacleImage[i] = new Image();
   obstacleImage[i].src = "img/chicken/"+i+".png";
 }
@@ -54,16 +55,16 @@ const player = {
     speed: 2,
     dx: 0,
     dy: 0,
-    gravity: 0.1,
-    jumpPower: -7,
+    gravity: 0.5,
+    jumpPower: -22,
     canJump: true
 };
 
 const ground = {
     x: 0,
-    y: canvas.height - 50,
+    y: canvas.height - 70,
     width: canvas.width,
-    height: 50
+    height: 70
 };
 
 const obstacles = [];
@@ -77,13 +78,17 @@ function drawPlayerRed() {
     drawAnimatedImage(playerRed, player.x, player.y, 0, 0, 64, 64);
 }
 
-function drawGround() {
-    ctx.fillStyle = 'green';
+const grassImage = new Image();
+grassImage.src = 'img/prato.png';
+
+function drawGround(){
+    const pattern = ctx.createPattern(grassImage, 'repeat');
+    ctx.fillStyle = pattern;
     ctx.fillRect(ground.x, ground.y, ground.width, ground.height);
-}
+};
 
 function drawObstacle(obstacle) {
-    drawAnimatedImage(obstacleImage, obstacle.x-20, obstacle.y-20, 0, 0, 1, obstacle.height, obstacle.width);
+    drawAnimatedImage(obstacleImage, obstacle.x, obstacle.y, 0, 0, 1, obstacle.height, obstacle.width);
 }
 
 function drawMeteor(meteor) {
@@ -116,15 +121,14 @@ function updateObstacles() {
 }
 
 function createObstacle() {
-    const height = Math.floor(Math.random() * canvas.height);
 
-    randomFactor = Math.floor(Math.random() * 141) + 50;
+    randomFactor = Math.floor(Math.random() * canvas.height) + 70;
 
     obstacles.push({
         x: canvas.width,
-        y: ground.y - height,
-        height : randomFactor,
-        width : randomFactor,
+        y: randomFactor,
+        height : 64,
+        width : 64,
         speed: speedHard
     });
 }
@@ -171,17 +175,10 @@ function checkCollision() {
                     window.location.reload();
                 }
 
-                livesstring = "";
-                lives -= 1;
+                points++;
                 hit = true; // Imposta 'hit' a true
 
-                for(let y = 0; y <= lives; y++){
-                    livesstring = livesstring + "❤️";
-                }
-                
-                livesElement.textContent = livesstring;
-
-                intervalRed = true;
+                timerElement.textContent = "record : " + points;
 
                 break;
             }
@@ -384,12 +381,13 @@ let lastUpdateTime = 0;
 
 function updateTimer() {
     let elapsedTime = Math.floor((Date.now() - startTime) / 1000); // Calcola i secondi trascorsi
-    timerElement.textContent = 'record : ' + elapsedTime;
 
     // Check if a minute has passed since the last update (or since startTime if no previous update)
     if (elapsedTime - lastUpdateTime >= 13) {
         lastUpdateTime = elapsedTime; // Update lastUpdateTime for future checks
         speedHard++;
+        // Create new meteors at regular intervals
+        setInterval(createMeteor, 1500);
     }
 }
 
