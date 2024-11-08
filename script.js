@@ -579,3 +579,4 @@ function showNotification(message, duration) {
 }
 
 setInterval(updateTimer, 100); // Aggiorna il timer ogni secondo
+setInterval(activatePowerup(), 10000); // Aggiorna il timer ogni secondo
